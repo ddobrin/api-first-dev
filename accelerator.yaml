@@ -1,0 +1,165 @@
+accelerator:
+  displayName: API-First Spring Boot Development 
+  description: A Spring Boot application generated from an OpenAPI spec with JVM/Native Image Compilation
+  iconUrl: https://raw.githubusercontent.com/simple-starters/icons/master/icon-tanzu-light.png
+  tags:
+    - spring
+    - cloud
+    - openapi
+    - serverless
+    - native
+  options:
+    - name: artifactId
+      label: Project Name
+      description: Project to be generated
+      required: true
+      dataType: string
+      inputType: text
+      defaultValue: api-first-project
+    - name: openapiSpec
+      label: OpenAPI Specification
+      description: Choose an OpenAPI spec to generate a Spring Boot app
+      inputType: radio
+      dataType: string
+      required: true
+      display: true
+      defaultValue: petclinic
+      choices: 
+      - value: petclinic
+        text: Petclinic v1 specification
+      - value: demoapi
+        text: Demo specification 
+
+    - name: deploymentType
+      label: Deployment Choices
+      display: true
+      inputType: select
+      description: Select the deployment model for your service
+      choices:
+      - value: none
+        text: Skip deployment configurations
+      - value: kubernetes-resource-simple 
+        text: Kubernetes Deployment and Service
+      - value: knative-resource-simple 
+        text: Knative Service Deployment
+      defaultValue: none
+    - name: includeSkaffold
+      label: Generate Skaffold file
+      description: Include a Skaffold image YAML file for K8s deployment
+      dataType: boolean
+      defaultValue: false
+      inputType: toggle
+    - name: includeKpackImage
+      label: Generate kpack file
+      description: Include a kpack image YAML file
+      dataType: boolean
+      defaultValue: false
+      inputType: toggle
+    - name: prefixContainerRegistryName
+      label: Registry Prefix
+      description: Container Registry prefix, ex. gcr.io/project-name
+      dataType: string
+      inputType: text
+      defaultValue: docker.io/triathlonguy
+
+engine:
+  merge:
+    - include: [ "**" ]
+      exclude: [ "kubernetes/**" ]
+    - include: [ "pom.xml" ]
+      chain:
+      - type: ReplaceText
+        substitutions:
+        - text: hello-function
+          with: "#artifactId"
+    - include: [ "pom.xml" ]
+      condition: "!(#activeProfiles.contains('jvm'))"
+      chain:
+      - type: ReplaceText
+        substitutions:
+        - text: '<!--start-jvm-->'
+          with: "'<!--start-jvm'"
+        - text: '<!--end-jvm-->'
+          with: "'end-jvm-->'"
+    - include: [ "pom.xml" ]
+      condition: "!(#activeProfiles.contains('jvm'))"
+      chain:
+        - type: ReplaceText
+          substitutions:
+            - text: '<!--start-jvm-->'
+              with: "'<!--start-jvm'"
+            - text: '<!--end-jvm-->'
+              with: "'end-jvm-->'"
+    - include: [ "pom.xml" ]
+      condition: "!(#activeProfiles.contains('jvm-image'))"
+      chain:
+        - type: ReplaceText
+          substitutions:
+            - text: '<!--start-jvm-image-->'
+              with: "'<!--start-jvm-image'"
+            - text: '<!--end-jvm-image-->'
+              with: "'end-jvm-image-->'"
+    - include: [ "pom.xml" ]
+      condition: "!(#activeProfiles.contains('native'))"
+      chain:
+        - type: ReplaceText
+          substitutions:
+            - text: '<!--start-native-->'
+              with: "'<!--start-native'"
+            - text: '<!--end-native-->'
+              with: "'end-native-->'"
+    - include: [ "pom.xml" ]
+      condition: "!(#activeProfiles.contains('native-image'))"
+      chain:
+        - type: ReplaceText
+          substitutions:
+            - text: '<!--start-native-image-->'
+              with: "'<!--start-native-image'"
+            - text: '<!--end-native-image-->'
+              with: "'end-native-image-->'"
+
+    - include: ["kubernetes/kn/*/service*.yaml"]
+      condition: "#deploymentType == 'knative-resource-simple'"
+      chain:
+      - type: ReplaceText
+        substitutions:
+        - text: "hello-function"
+          with: "#artifactId"
+    - include: ["kubernetes/k8s/*/service*.yaml", "kubernetes/k8s/*/deployment*.yaml"]
+      condition: "#deploymentType == 'kubernetes-resource-simple'"
+      chain:
+      - type: ReplaceText
+        substitutions:
+        - text: "hello-function"
+          with: "#artifactId"
+    - include: ["kubernetes/k8s/*/skaffold*.yaml"]
+      condition: "#includeSkaffold"
+      chain:
+        - type: ReplaceText
+          substitutions:
+            - text: "hello-function"
+              with: "#artifactId"
+    - include: ["kubernetes/kpack/*/image*.yaml"]
+      condition: "#includeKpackImage"
+      # logical operators for conditions
+      # condition: "#includeKpackImage and #deploymentType == 'none'"
+      chain:
+      - type: ReplaceText
+        substitutions:
+        - text: "hello-function"
+          with: "#artifactId"
+    - include: ["kubernetes/kn/*/service*.yaml"]
+      condition: "#deploymentType == 'knative-resource-simple'"
+      chain:
+      - type: ReplaceText
+        substitutions:
+        - text: "registryPrefix"
+          with: "#prefixContainerRegistryName"
+    - include: ["kubernetes/k8s/*/service*.yaml", "kubernetes/k8s/*/deployment*.yaml"]
+      condition: "#deploymentType == 'kubernetes-resource-simple'"
+      chain:
+      - type: ReplaceText
+        substitutions:
+        - text: "registryPrefix"
+          with: "#prefixContainerRegistryName"
+
