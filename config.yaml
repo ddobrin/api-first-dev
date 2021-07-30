@@ -1,6 +1,6 @@
   groupId: "basePackage" 
   artifactId: "artifactId" 
-  artifactVersion: "0.0.1" 
+  artifactVersion: "artifactVersion" 
   groupId: "basePackage.artifactId" 
   basePackage: "basePackage.artifactId" 
   apiPackage: "basePackage.artifactId.api" 

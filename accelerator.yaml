@@ -40,9 +40,9 @@ accelerator:
       defaultValue: petclinic
       choices: 
       - value: petclinic
-        text: Petclinic v1 specification
+        text: Petclinic API specification v1.0.0
       - value: demoapi
-        text: Demo specification 
+        text: APITest API specification V1.1.0 
 
     - name: deploymentType
       label: Deployment Choices
@@ -80,100 +80,110 @@ engine:
   merge:
     - include: [ "**" ]
       exclude: [ "kubernetes/**" ]
+    - include: ["config.yaml"]
     - include: [ "pom.xml" ]
       chain:
       - type: ReplaceText
         substitutions:
-        - text: hello-function
+        - text: "basePackage"
+          with: "#basePackage"
+      - type: ReplaceText
+        substitutions:
+        - text: "artifactId"
           with: "#artifactId"
-    - include: [ "pom.xml" ]
-      condition: "!(#activeProfiles.contains('jvm'))"
-      chain:
       - type: ReplaceText
-        substitutions:
-        - text: '<!--start-jvm-->'
-          with: "'<!--start-jvm'"
-        - text: '<!--end-jvm-->'
-          with: "'end-jvm-->'"
-    - include: [ "pom.xml" ]
-      condition: "!(#activeProfiles.contains('jvm'))"
-      chain:
-        - type: ReplaceText
-          substitutions:
-            - text: '<!--start-jvm-->'
-              with: "'<!--start-jvm'"
-            - text: '<!--end-jvm-->'
-              with: "'end-jvm-->'"
-    - include: [ "pom.xml" ]
-      condition: "!(#activeProfiles.contains('jvm-image'))"
-      chain:
-        - type: ReplaceText
-          substitutions:
-            - text: '<!--start-jvm-image-->'
-              with: "'<!--start-jvm-image'"
-            - text: '<!--end-jvm-image-->'
-              with: "'end-jvm-image-->'"
-    - include: [ "pom.xml" ]
-      condition: "!(#activeProfiles.contains('native'))"
-      chain:
-        - type: ReplaceText
-          substitutions:
-            - text: '<!--start-native-->'
-              with: "'<!--start-native'"
-            - text: '<!--end-native-->'
-              with: "'end-native-->'"
-    - include: [ "pom.xml" ]
-      condition: "!(#activeProfiles.contains('native-image'))"
-      chain:
-        - type: ReplaceText
-          substitutions:
-            - text: '<!--start-native-image-->'
-              with: "'<!--start-native-image'"
-            - text: '<!--end-native-image-->'
-              with: "'end-native-image-->'"
+        substitutions: 
+        - text: "artifactVersion"
+          with: "#artifactVersion"
 
-    - include: ["kubernetes/kn/*/service*.yaml"]
-      condition: "#deploymentType == 'knative-resource-simple'"
-      chain:
-      - type: ReplaceText
-        substitutions:
-        - text: "hello-function"
-          with: "#artifactId"
-    - include: ["kubernetes/k8s/*/service*.yaml", "kubernetes/k8s/*/deployment*.yaml"]
-      condition: "#deploymentType == 'kubernetes-resource-simple'"
-      chain:
-      - type: ReplaceText
-        substitutions:
-        - text: "hello-function"
-          with: "#artifactId"
-    - include: ["kubernetes/k8s/*/skaffold*.yaml"]
-      condition: "#includeSkaffold"
-      chain:
-        - type: ReplaceText
-          substitutions:
-            - text: "hello-function"
-              with: "#artifactId"
-    - include: ["kubernetes/kpack/*/image*.yaml"]
-      condition: "#includeKpackImage"
-      # logical operators for conditions
-      # condition: "#includeKpackImage and #deploymentType == 'none'"
-      chain:
-      - type: ReplaceText
-        substitutions:
-        - text: "hello-function"
-          with: "#artifactId"
-    - include: ["kubernetes/kn/*/service*.yaml"]
-      condition: "#deploymentType == 'knative-resource-simple'"
-      chain:
-      - type: ReplaceText
-        substitutions:
-        - text: "registryPrefix"
-          with: "#prefixContainerRegistryName"
-    - include: ["kubernetes/k8s/*/service*.yaml", "kubernetes/k8s/*/deployment*.yaml"]
-      condition: "#deploymentType == 'kubernetes-resource-simple'"
-      chain:
-      - type: ReplaceText
-        substitutions:
-        - text: "registryPrefix"
-          with: "#prefixContainerRegistryName"
+    # - include: [ "pom.xml" ]
+    #   condition: "!(#activeProfiles.contains('jvm'))"
+    #   chain:
+    #   - type: ReplaceText
+    #     substitutions:
+    #     - text: '<!--start-jvm-->'
+    #       with: "'<!--start-jvm'"
+    #     - text: '<!--end-jvm-->'
+    #       with: "'end-jvm-->'"
+    # - include: [ "pom.xml" ]
+    #   condition: "!(#activeProfiles.contains('jvm'))"
+    #   chain:
+    #     - type: ReplaceText
+    #       substitutions:
+    #         - text: '<!--start-jvm-->'
+    #           with: "'<!--start-jvm'"
+    #         - text: '<!--end-jvm-->'
+    #           with: "'end-jvm-->'"
+    # - include: [ "pom.xml" ]
+    #   condition: "!(#activeProfiles.contains('jvm-image'))"
+    #   chain:
+    #     - type: ReplaceText
+    #       substitutions:
+    #         - text: '<!--start-jvm-image-->'
+    #           with: "'<!--start-jvm-image'"
+    #         - text: '<!--end-jvm-image-->'
+    #           with: "'end-jvm-image-->'"
+    # - include: [ "pom.xml" ]
+    #   condition: "!(#activeProfiles.contains('native'))"
+    #   chain:
+    #     - type: ReplaceText
+    #       substitutions:
+    #         - text: '<!--start-native-->'
+    #           with: "'<!--start-native'"
+    #         - text: '<!--end-native-->'
+    #           with: "'end-native-->'"
+    # - include: [ "pom.xml" ]
+    #   condition: "!(#activeProfiles.contains('native-image'))"
+    #   chain:
+    #     - type: ReplaceText
+    #       substitutions:
+    #         - text: '<!--start-native-image-->'
+    #           with: "'<!--start-native-image'"
+    #         - text: '<!--end-native-image-->'
+    #           with: "'end-native-image-->'"
+
+    # - include: ["kubernetes/kn/*/service*.yaml"]
+    #   condition: "#deploymentType == 'knative-resource-simple'"
+    #   chain:
+    #   - type: ReplaceText
+    #     substitutions:
+    #     - text: "hello-function"
+    #       with: "#artifactId"
+    # - include: ["kubernetes/k8s/*/service*.yaml", "kubernetes/k8s/*/deployment*.yaml"]
+    #   condition: "#deploymentType == 'kubernetes-resource-simple'"
+    #   chain:
+    #   - type: ReplaceText
+    #     substitutions:
+    #     - text: "hello-function"
+    #       with: "#artifactId"
+    # - include: ["kubernetes/k8s/*/skaffold*.yaml"]
+    #   condition: "#includeSkaffold"
+    #   chain:
+    #     - type: ReplaceText
+    #       substitutions:
+    #         - text: "hello-function"
+    #           with: "#artifactId"
+    # - include: ["kubernetes/kpack/*/image*.yaml"]
+    #   condition: "#includeKpackImage"
+    #   # logical operators for conditions
+    #   # condition: "#includeKpackImage and #deploymentType == 'none'"
+    #   chain:
+    #   - type: ReplaceText
+    #     substitutions:
+    #     - text: "hello-function"
+    #       with: "#artifactId"
+    # - include: ["kubernetes/kn/*/service*.yaml"]
+    #   condition: "#deploymentType == 'knative-resource-simple'"
+    #   chain:
+    #   - type: ReplaceText
+    #     substitutions:
+    #     - text: "registryPrefix"
+    #       with: "#prefixContainerRegistryName"
+    # - include: ["kubernetes/k8s/*/service*.yaml", "kubernetes/k8s/*/deployment*.yaml"]
+    #   condition: "#deploymentType == 'kubernetes-resource-simple'"
+    #   chain:
+    #   - type: ReplaceText
+    #     substitutions:
+    #     - text: "registryPrefix"
+    #       with: "#prefixContainerRegistryName"
 
