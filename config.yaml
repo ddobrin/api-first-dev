@@ -1,7 +1,7 @@
   groupId: "basePackage" 
   artifactId: "artifactIdValue" 
   artifactVersion: "artifactVersionValue" 
-  groupId: "basePackage.artifactIdValue" 
+  groupId: "basePackageValue.artifactIdValue" 
   basePackage: "basePackageValue.artifactIdValue" 
   apiPackage: "basePackageValue.artifactIdValue.api" 
   modelPackage: "basePackageValue.artifactIdValue.model" 
