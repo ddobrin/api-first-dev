@@ -84,15 +84,15 @@ engine:
         - include: [ "config.yaml" ]
         - type: ReplaceText
           substitutions:
-          - text: "basePackage"
+          - text: "basePackageValue"
             with: "#basePackageValue"
         - type: ReplaceText
           substitutions:
-          - text: "artifactId"
+          - text: "artifactIdValue"
             with: "#artifactIdValue"
         - type: ReplaceText
           substitutions: 
-          - text: "artifactVersion"
+          - text: "artifactVersionValue"
             with: "#artifactVersionValue"
 
     # - include: [ "pom.xml" ]
