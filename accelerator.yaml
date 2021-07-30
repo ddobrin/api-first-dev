@@ -15,7 +15,7 @@ accelerator:
       required: true
       dataType: string
       inputType: text
-      defaultValue: api-first-project
+      defaultValue: api_first_project
     - name: artifactVersionValue
       label: Project Version
       description: The initial project version to be assigned, in Semver 2.0.0 format (x.y.z)
@@ -25,7 +25,7 @@ accelerator:
       defaultValue: 0.0.1
     - name: basePackageValue
       label: Base Package
-      description: Base package for the generated Java files
+      description: Base package for the generated Java files [default is base package value + artifact ID value]
       required: true
       dataType: string
       inputType: text
