@@ -1,4 +1,4 @@
-  groupId: "basePackage" 
+  groupId: "basePackageValue" 
   artifactId: "artifactIdValue" 
   artifactVersion: "artifactVersionValue" 
   groupId: "basePackageValue.artifactIdValue" 
