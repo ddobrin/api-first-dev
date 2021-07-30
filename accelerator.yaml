@@ -11,11 +11,25 @@ accelerator:
   options:
     - name: artifactId
       label: Project Name
-      description: Project to be generated
+      description: Name of the project to be generated
       required: true
       dataType: string
       inputType: text
       defaultValue: api-first-project
+    - name: artifactVersion
+      label: Project Version
+      description: The initial project version to be assigned, in Semver 2.0.0 format (x.y.z)
+      required: true
+      dataType: string
+      inputType: text
+      defaultValue: 0.0.1
+    - name: basePackage
+      label: Base Package
+      description: Base package for the generated Java files
+      required: true
+      dataType: string
+      inputType: text
+      defaultValue: com.example
     - name: openapiSpec
       label: OpenAPI Specification
       description: Choose an OpenAPI spec to generate a Spring Boot app
@@ -53,7 +67,7 @@ accelerator:
       label: Generate kpack file
       description: Include a kpack image YAML file
       dataType: boolean
-      defaultValue: false
+      defaultValue: true
       inputType: toggle
     - name: prefixContainerRegistryName
       label: Registry Prefix
