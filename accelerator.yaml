@@ -79,22 +79,21 @@ accelerator:
 engine:
   merge:
     - include: [ "**" ]
-      exclude: [ "kubernetes/**" ]
-    - include: ["config.yaml"]
-    - include: [ "pom.xml" ]
-      chain:
-      - type: ReplaceText
-        substitutions:
-        - text: "basePackage"
-          with: "#basePackage"
-      - type: ReplaceText
-        substitutions:
-        - text: "artifactId"
-          with: "#artifactId"
-      - type: ReplaceText
-        substitutions: 
-        - text: "artifactVersion"
-          with: "#artifactVersion"
+      exclude: [ "config.yaml" ]
+    - chain:
+        - include: [ "config.yaml" ]
+        - type: ReplaceText
+          substitutions:
+          - text: "basePackage"
+            with: "#basePackage"
+        - type: ReplaceText
+          substitutions:
+          - text: "artifactId"
+            with: "#artifactId"
+        - type: ReplaceText
+          substitutions: 
+          - text: "artifactVersion"
+            with: "#artifactVersion"
 
     # - include: [ "pom.xml" ]
     #   condition: "!(#activeProfiles.contains('jvm'))"
