@@ -9,21 +9,21 @@ accelerator:
     - serverless
     - native
   options:
-    - name: artifactId
+    - name: artifactIdValue
       label: Project Name
       description: Name of the project to be generated
       required: true
       dataType: string
       inputType: text
       defaultValue: api-first-project
-    - name: artifactVersion
+    - name: artifactVersionValue
       label: Project Version
       description: The initial project version to be assigned, in Semver 2.0.0 format (x.y.z)
       required: true
       dataType: string
       inputType: text
       defaultValue: 0.0.1
-    - name: basePackage
+    - name: basePackageValue
       label: Base Package
       description: Base package for the generated Java files
       required: true
@@ -85,15 +85,15 @@ engine:
         - type: ReplaceText
           substitutions:
           - text: "basePackage"
-            with: "#basePackage"
+            with: "#basePackageValue"
         - type: ReplaceText
           substitutions:
           - text: "artifactId"
-            with: "#artifactId"
+            with: "#artifactIdValue"
         - type: ReplaceText
           substitutions: 
           - text: "artifactVersion"
-            with: "#artifactVersion"
+            with: "#artifactVersionValue"
 
     # - include: [ "pom.xml" ]
     #   condition: "!(#activeProfiles.contains('jvm'))"
